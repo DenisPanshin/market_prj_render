@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
-from .forms import TravelUserRegisterForm, TravelUserLoginForm, \
-    TravelUserEditForm, TravelUserProfileEditForm
 from django.contrib import auth
 from django.db import transaction
+from authapp.forms import TravelUserRegisterForm, TravelUserLoginForm, \
+    TravelUserEditForm, TravelUserProfileEditForm
 
 
-# Регистрацияпользователя
+# Регистрация пользователя
 def register(request):
+
     title = 'регистрация'
 
     if request.method == 'POST':
@@ -19,11 +20,13 @@ def register(request):
             return HttpResponseRedirect(reverse('auth:login'))
     else:
         register_form = TravelUserRegisterForm()
+
     content = {'title': title, 'register_form': register_form}
+
     return render(request, 'authapp/register.html', content)
 
 
-# Аутентификацияпользователя
+# Аутентификация пользователя
 def login(request):
     title = 'вход'
 
@@ -54,19 +57,23 @@ def login(request):
     return render(request, 'authapp/login.html', content)
 
 
+# Завершение сессии
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('main'))
 
 
+# Редактирование данных пользователя и его профиля
 @transaction.atomic()
 def edit(request):
+
     title = 'редактирование'
 
     if request.method == 'POST':
         edit_form = TravelUserEditForm(request.POST,
                                        request.FILES, instance=request.user)
-        profile_form = TravelUserProfileEditForm(request.POST, instance=request.user.traveluserprofile)
+        profile_form = TravelUserProfileEditForm(
+            request.POST, instance=request.user.traveluserprofile)
 
         if edit_form.is_valid() and profile_form.is_valid():
             edit_form.save()

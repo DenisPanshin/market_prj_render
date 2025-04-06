@@ -23,18 +23,18 @@ class Regions(models.Model):
 class Accommodation(models.Model):
     country = models.ForeignKey(ListOfCountries, on_delete=models.CASCADE)
     region = models.ForeignKey(Regions, on_delete=models.CASCADE)
-    name = models.CharField(verbose_name='названиепроживания',
-                            max_length=128, unique=True)
+    name = models.CharField(verbose_name='название проживания', max_length=128,
+                            unique=True)
     image = models.ImageField(upload_to='accommodation_img', blank=True)
-    short_desc = models.TextField(verbose_name='краткоеописаниепродукта',
+    short_desc = models.TextField(verbose_name='краткое описание продукта',
                                   max_length=60, blank=True)
-    description = models.TextField(verbose_name='описаниепродукта',
+    description = models.TextField(verbose_name='описание продукта',
                                    blank=True)
-    availability = models.PositiveIntegerField(
-        verbose_name='количествосвободныхномеров')
+    availability = models.PositiveIntegerField(verbose_name=
+                                               'количество свободных номеров')
     price = models.DecimalField(
         verbose_name='цена', max_digits=8, decimal_places=2, default=0)
-    room_desc = models.TextField(verbose_name='краткоеописаниекомнаты',
+    room_desc = models.TextField(verbose_name='краткое описание комнаты',
                                  max_length=60, blank=True)
     is_active = models.BooleanField(verbose_name='активна', default=True)
 

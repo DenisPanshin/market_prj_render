@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from .models import Accommodation, ListOfCountries
+from .models import Accommodation
+from .models import ListOfCountries
 
 
 def main(request):
@@ -9,16 +10,23 @@ def main(request):
 
 def accommodations(request):
     title = 'размещение'
+
     list_of_accommodations = Accommodation.objects.filter(is_active=True)
-    content = {'title': title, 'list_of_accommodations': list_of_accommodations,
-               }
+
+    content = {
+        'title': title,
+        'list_of_accommodations': list_of_accommodations,
+    }
+
     return render(request, 'mainapp/accommodations.html', content)
 
 
 def accommodation(request, pk):
     title = 'продукты'
+
     content = {
         'title': title,
+        'links_menu': ListOfCountries.objects.all(),
         'accommodation': get_object_or_404(Accommodation, pk=pk),
     }
 

@@ -16,6 +16,7 @@ from authapp.models import TravelUser
 from authapp.forms import TravelUserRegisterForm
 from adminapp.forms import TravelUserAdminEditForm
 from adminapp.forms import AccommodationEditForm
+# from adminapp.forms import ListOfCountriesEditForm
 
 
 # админка - список пользователей
@@ -30,7 +31,7 @@ class TravelUsersListView(ListView):
 
 # админка - создание пользователя
 @user_passes_test(lambda u: u.is_superuser)
-def user_create(request):
+def travel_user_create(request):
     title = 'пользователи/создание'
 
     if request.method == 'POST':
@@ -51,15 +52,14 @@ def user_create(request):
 
 # админка - редактирование пользователя
 @user_passes_test(lambda u: u.is_superuser)
-def user_update(request, pk):
+def travel_user_update(request, pk):
     title = 'пользователи/редактирование'
 
     edit_user = get_object_or_404(TravelUser, pk=pk)
 
     if request.method == 'POST':
         edit_form = TravelUserAdminEditForm(request.POST,
-                                            request.FILES,
-                                            instance=edit_user)
+                                            request.FILES, instance=edit_user)
         if edit_form.is_valid():
             edit_form.save()
             return HttpResponseRedirect(reverse('admin:user_update',
@@ -77,7 +77,7 @@ def user_update(request, pk):
 
 # админка - удаление пользователя
 @user_passes_test(lambda u: u.is_superuser)
-def user_delete(request, pk):
+def travel_user_delete(request, pk):
     title = 'пользователи/удаление'
 
     user = get_object_or_404(TravelUser, pk=pk)
@@ -207,12 +207,12 @@ def accommodation_update(request, pk):
     else:
         accommodation_edit_form = AccommodationEditForm(
             instance=edit_accommodation)
-    content = {
-        'title': title,
-        'update_form': accommodation_edit_form,
-        'country': edit_accommodation.country,
-    }
-    return render(request, 'adminapp/accommodation_update.html', content)
+        content = {
+            'title': title,
+            'update_form': accommodation_edit_form,
+            'country': edit_accommodation.country,
+        }
+        return render(request, 'adminapp/accommodation_update.html', content)
 
 
 # админка - карточка предложения компании
@@ -237,3 +237,22 @@ def accommodation_delete(request, pk):
         'accommodation_to_delete': accommodation,
     }
     return render(request, 'adminapp/accommodation_delete.html', content)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def travel_user_delete(request, pk):
+    title = 'пользователи/удаление'
+
+    user = get_object_or_404(TravelUser, pk=pk)
+
+    if request.method == 'POST':
+        user.is_active = False
+        user.save()
+        return HttpResponseRedirect(reverse('admin:users'))
+
+    content = {
+        'title': title,
+        'user_to_delete': user,
+    }
+
+    return render(request, 'adminapp/user_delete.html', content)
