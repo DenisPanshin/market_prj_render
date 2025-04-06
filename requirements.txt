@@ -83,7 +83,6 @@ pylint==2.4.3
 pymongo==3.10.1
 Pympler==0.6
 pyparsing==2.4.7
-pypiwin32==223
 PyQt5==5.11.3
 PyQt5-sip==4.19.17
 pyTelegramBotAPI==3.6.6
